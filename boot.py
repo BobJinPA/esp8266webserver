@@ -14,8 +14,8 @@ esp.osdebug(None)
 import gc
 gc.collect()
 
-ssid = 'Fios-Y20XF'
-password = 'glad3577age0826car'
+ssid = ''
+password = ''
 
 station = network.WLAN(network.STA_IF)
 
