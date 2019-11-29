@@ -14,8 +14,13 @@ esp.osdebug(None)
 import gc
 gc.collect()
 
-ssid = 'Fios-Y20XF'
-password = 'glad3577age0826car'
+import json
+with open('credentials.json') as credentials:
+  data = json.load(credentials)
+  ssid = data['ssid']
+  password = data['password']
+# ssid = 'Fios-Y20XF'
+# password = 'glad3577age0826car'
 
 station = network.WLAN(network.STA_IF)
 
@@ -28,23 +33,13 @@ while station.isconnected() == False:
 print('Connection successful')
 print(station.ifconfig())
 
-# # led = Pin(2, Pin.OUT)
+relay = Pin(16, Pin.OUT)
+relay.off()
 
-# # This file is executed on every boot (including wake-boot from deepsleep)
-# #import esp
-# #esp.osdebug(None)
-# import uos, machine
-# #uos.dupterm(None, 1) # disable REPL on UART(0)
-# import gc
-# #import webrepl
-# #webrepl.start()
-# gc.collect()
-
-# import time
-
-# led = Pin(2, Pin.OUT)
-led.on()
-time.sleep(1)
-led.off()
-time.sleep(1)
-led.on()
+drain = Pin(2, Pin.OUT)
+lp_water = Pin(4, Pin.OUT)
+hp_water = Pin(5, Pin.OUT)
+lp_cleaner = Pin(12, Pin.OUT)
+hp_cleaner = Pin(13, Pin.OUT)
+lp_santizer = Pin(14, Pin.OUT)
+hp_santizer = Pin(15, Pin.OUT)
