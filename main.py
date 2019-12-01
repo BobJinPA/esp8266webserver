@@ -1,29 +1,85 @@
 import uasyncio as asyncio
 import utime
 
-async def bar():
+previous_clean_state = False
+clean_state = False
+
+async def counter():
     count = 0
     while True:
         count += 1
-        print(count)
+        print("--", str(count))
         await asyncio.sleep(1)  # Pause 1s
 
-async def foo():
 
-    print("DRAIN")    
+async def sleep(seconds):
+    for i in range(seconds):
+        if (clean_state):
+            await asyncio.sleep(1)
+        else:
+            return False
+    return True
+
+async def clean_process():
+    # global clean_state
+    # if (clean_state):
+    # break if not (await sleep(0))
+    print("DRAIN")  
     await asyncio.sleep(2)
+  
+    # break if not (await sleep(20))
+    # if (await sleep(20)) == False:
+    #     return False
     print("FILL WATER")
     await asyncio.sleep(2)
     print("FILL CLEANER")
     await asyncio.sleep(2)
     print("DRAIN")
     await asyncio.sleep(2)
+    print("FILL WATER")
+    await asyncio.sleep(2)
+    print("DRAIN")
+    await asyncio.sleep(2)
+    print("SANTIZER")
+    await asyncio.sleep(2)
+    print("DRAIN")
+    await asyncio.sleep(2)
+    print("FILL WATER")
+    await asyncio.sleep(2)
+    print("DRAIN")
+
+
+
+async def clean():
+    global clean_state
     while True:
-        print("Bob")
-        await asyncio.sleep(2.6)
+        print("Test state", str(clean_state))
+        if clean_state:
+            await clean_process()
+            clean_state = False
+            # print("DRAIN")    
+            # await asyncio.sleep(2)
+            # print("FILL WATER")
+            # await asyncio.sleep(2)
+            # print("FILL CLEANER")
+            # await asyncio.sleep(2)
+            # print("DRAIN")
+            # await asyncio.sleep(2)
+            # print("FILL WATER")
+            # await asyncio.sleep(2)
+            # print("DRAIN")
+            # await asyncio.sleep(2)
+            # print("SANTIZER")
+            # await asyncio.sleep(2)
+            # print("DRAIN")
+            # await asyncio.sleep(2)
+            # print("FILL WATER")
+            # await asyncio.sleep(2)
+            # print("DRAIN")
+        else:
+            await asyncio.sleep(.2)
 
 def web_page():
-  print("starting web_page()")
   if drain.value() == 1:
     gpio_state="ON"
   else:
@@ -31,7 +87,7 @@ def web_page():
   
   html = """<html>
   <head>
-  <title>ESP Web Server</title>
+  <title>Keg Cleaner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,"> 
   <style>
@@ -44,7 +100,7 @@ def web_page():
   </head>
   <body> 
   <h1>Keg Cleaner Web Server</h1> 
-  <p>GPIO state: <strong>""" + gpio_state + """</strong></p>
+  <p>Cleaner state: <strong>""" + gpio_state + """</strong></p>
   <p>
   <a href="/?start=on">
   <button class="button">START</button>
@@ -57,34 +113,28 @@ def web_page():
   </html>"""
   return html        
 
-print("starting web_server")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 80))
 s.listen(5)
 s.setblocking(1)
-s.settimeout(.1)
+s.settimeout(.2)
 
 async def web_server():
-    print("STARTING web server")
+    global clean_state
     while True:
-        print(utime.time())
-        # await asyncio.sleep(6)
         try:
             conn, addr = s.accept()
-            print("past accept")
             print('Got a connection from %s' % str(addr))
             request = conn.recv(1024)
-            print("After .recv")
-            print(str(request))
             request = str(request)
-            print("A")
             start_on = request.find('/?start=on')
             start_off = request.find('/?start=off')
             if start_on == 6:
                 print('START ON')
+                clean_state = True
             if start_off == 6:
                 print('START OFF')
-            print("C")
+                clean_state = False
             response = web_page()
             conn.send('HTTP/1.1 200 OK\n')
             conn.send('Content-Type: text/html\n')
@@ -93,13 +143,12 @@ async def web_server():
             conn.close()      
 
         except:
-            print("FALSE")
-            await asyncio.sleep(1)
+            await asyncio.sleep(.2)
 
-        print(utime.time()) 
+        # print(utime.time()) 
 
 loop = asyncio.get_event_loop()
-loop.create_task(bar()) # Schedule ASAP
-loop.create_task(foo())
+loop.create_task(counter()) # Schedule ASAP
+loop.create_task(clean())
 loop.create_task(web_server())
 loop.run_forever()
