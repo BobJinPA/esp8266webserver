@@ -21,32 +21,25 @@ async def sleep(seconds):
     return True
 
 async def clean_process():
-    # global clean_state
-    # if (clean_state):
-    # break if not (await sleep(0))
     print("DRAIN")  
-    await asyncio.sleep(2)
-  
-    # break if not (await sleep(20))
-    # if (await sleep(20)) == False:
-    #     return False
+    await sleep(2)
     print("FILL WATER")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("FILL CLEANER")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("DRAIN")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("FILL WATER")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("DRAIN")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("SANTIZER")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("DRAIN")
-    await asyncio.sleep(2)
+    await sleep(2)
     print("FILL WATER")
-    await asyncio.sleep(2)
-    print("DRAIN")
+    await sleep(2)
+    print("DRAIN") #'DRAIN' is the final and safe state
 
 
 
@@ -57,61 +50,42 @@ async def clean():
         if clean_state:
             await clean_process()
             clean_state = False
-            # print("DRAIN")    
-            # await asyncio.sleep(2)
-            # print("FILL WATER")
-            # await asyncio.sleep(2)
-            # print("FILL CLEANER")
-            # await asyncio.sleep(2)
-            # print("DRAIN")
-            # await asyncio.sleep(2)
-            # print("FILL WATER")
-            # await asyncio.sleep(2)
-            # print("DRAIN")
-            # await asyncio.sleep(2)
-            # print("SANTIZER")
-            # await asyncio.sleep(2)
-            # print("DRAIN")
-            # await asyncio.sleep(2)
-            # print("FILL WATER")
-            # await asyncio.sleep(2)
-            # print("DRAIN")
         else:
             await asyncio.sleep(.2)
 
 def web_page():
-  if drain.value() == 1:
-    gpio_state="ON"
-  else:
-    gpio_state="OFF"
-  
-  html = """<html>
-  <head>
-  <title>Keg Cleaner</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="data:,"> 
-  <style>
-  html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
-  h1{color: #0F3376; padding: 2vh;}p{font-size: 1.5rem;}
-  .button{display: inline-block; background-color: #e7bd3b; border: none; 
-  border-radius: 4px; color: white; padding: 16px 40px; text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
-  .button2{background-color: #4286f4;}
-  </style>
-  </head>
-  <body> 
-  <h1>Keg Cleaner Web Server</h1> 
-  <p>Cleaner state: <strong>""" + gpio_state + """</strong></p>
-  <p>
-  <a href="/?start=on">
-  <button class="button">START</button>
-  </a>
-  </p>
-  <p>
-  <a href="/?start=off"><button class="button button2">STOP</button></a>
-  </p>
-  </body>
-  </html>"""
-  return html        
+    if drain.value() == 1:
+      gpio_state="ON"
+    else:
+      gpio_state="OFF"
+    
+    html = """<html>
+    <head>
+    <title>Keg Cleaner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,"> 
+    <style>
+    html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
+    h1{color: #0F3376; padding: 2vh;}p{font-size: 1.5rem;}
+    .button{display: inline-block; background-color: #e7bd3b; border: none; 
+    border-radius: 4px; color: white; padding: 16px 40px; text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
+    .button2{background-color: #4286f4;}
+    </style>
+    </head>
+    <body> 
+    <h1>Keg Cleaner Web Server</h1> 
+    <p>Cleaner state: <strong>""" + gpio_state + """</strong></p>
+    <p>
+    <a href="/?start=on">
+    <button class="button">START</button>
+    </a>
+    </p>
+    <p>
+    <a href="/?start=off"><button class="button button2">STOP</button></a>
+    </p>
+    </body>
+    </html>"""
+    return html        
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 80))
@@ -145,10 +119,9 @@ async def web_server():
         except:
             await asyncio.sleep(.2)
 
-        # print(utime.time()) 
 
 loop = asyncio.get_event_loop()
-loop.create_task(counter()) # Schedule ASAP
+loop.create_task(counter())
 loop.create_task(clean())
 loop.create_task(web_server())
 loop.run_forever()

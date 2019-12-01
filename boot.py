@@ -1,5 +1,3 @@
-# Complete project details at https://RandomNerdTutorials.com
-
 try:
   import usocket as socket
 except:
@@ -41,4 +39,5 @@ lp_cleaner = Pin(12, Pin.OUT)
 hp_cleaner = Pin(13, Pin.OUT)
 lp_santizer = Pin(14, Pin.OUT)
 hp_santizer = Pin(15, Pin.OUT)
+
 
