@@ -40,5 +40,16 @@ hp_cleaner = Pin(13, Pin.OUT)
 lp_santizer = Pin(14, Pin.OUT)
 hp_santizer = Pin(15, Pin.OUT)
 
+def all_off():
+    drain.off()
+    lp_water.off()
+    hp_water.off()
+    lp_cleaner.off()
+    hp_cleaner.off()
+    lp_santizer.off()
+    hp_santizer.off()
+
+all_off()    
+
 profile_file = open('profile.json', 'r')
 profile = json.load(profile_file)

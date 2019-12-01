@@ -1,7 +1,6 @@
 import uasyncio as asyncio
 import utime
 
-previous_clean_state = False
 clean_state = False
 
 async def counter():
@@ -41,15 +40,16 @@ def interface(step):
 
 async def clean_process():
     for item in profile:
+        all_off()
         print(item["step"])
+        interface(item["step"]).on()
         await sleep(item["duration"])
-
 
 
 async def clean():
     global clean_state
     while True:
-        print("Test state", str(clean_state))
+        # print("Test state", str(clean_state))
         if clean_state:
             await clean_process()
             clean_state = False
@@ -124,7 +124,7 @@ async def web_server():
 
 
 loop = asyncio.get_event_loop()
-loop.create_task(counter())
+# loop.create_task(counter())
 loop.create_task(clean())
 loop.create_task(web_server())
 loop.run_forever()

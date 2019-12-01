@@ -9,7 +9,7 @@
 },
 {
 	"step": "fill high pressure water",
-	"duration": 2
+	"duration": 4
 },
 {
 	"step": "fill low pressure cleaner",
@@ -17,7 +17,7 @@
 },
 {
 	"step": "fill high pressure cleaner",
-	"duration": 2
+	"duration": 4
 },
 {
 	"step": "drain",
@@ -37,7 +37,7 @@
 },
 {
 	"step": "fill high pressure sanitizer",
-	"duration": 2
+	"duration": 4
 },
 {
 	"step": "drain",
