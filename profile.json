@@ -1,0 +1,54 @@
+[
+{
+	"step": "drain",
+	"duration": 2
+},
+{
+	"step": "fill low pressure water",
+	"duration": 2
+},
+{
+	"step": "fill high pressure water",
+	"duration": 2
+},
+{
+	"step": "fill low pressure cleaner",
+	"duration": 2
+},
+{
+	"step": "fill high pressure cleaner",
+	"duration": 2
+},
+{
+	"step": "drain",
+	"duration": 2
+},
+{
+	"step": "fill low pressure water",
+	"duration": 2
+},
+{
+	"step": "drain",
+	"duration": 2
+},
+{
+	"step": "fill low pressure sanitizer",
+	"duration": 2
+},
+{
+	"step": "fill high pressure sanitizer",
+	"duration": 2
+},
+{
+	"step": "drain",
+	"duration": 2
+},
+{
+	"step": "fill low pressure water",
+	"duration": 2
+},
+{
+	"step": "drain",
+	"duration": 2
+}
+]

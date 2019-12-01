@@ -20,26 +20,29 @@ async def sleep(seconds):
             return False
     return True
 
+
+def interface(step):
+    if step == "drain":
+        return drain
+    if step == "fill low pressure water":
+        return lp_water
+    if step == "fill high pressure water":
+        return hp_water
+    if step == "fill low pressure cleaner":
+        return lp_cleaner
+    if step == "fill high pressure cleaner":
+        return hp_cleaner
+    if step == "fill low pressure sanitizer":
+        return lp_santizer
+    if step == "fill high pressure sanitizer":
+        return hp_santizer   
+    return False
+
+
 async def clean_process():
-    print("DRAIN")  
-    await sleep(2)
-    print("FILL WATER")
-    await sleep(2)
-    print("FILL CLEANER")
-    await sleep(2)
-    print("DRAIN")
-    await sleep(2)
-    print("FILL WATER")
-    await sleep(2)
-    print("DRAIN")
-    await sleep(2)
-    print("SANTIZER")
-    await sleep(2)
-    print("DRAIN")
-    await sleep(2)
-    print("FILL WATER")
-    await sleep(2)
-    print("DRAIN") #'DRAIN' is the final and safe state
+    for item in profile:
+        print(item["step"])
+        await sleep(item["duration"])
 
 
 

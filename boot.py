@@ -13,7 +13,7 @@ import gc
 gc.collect()
 
 import json
-with open('credentials.json') as credentials:
+with open('credentials.json', 'r') as credentials:
   data = json.load(credentials)
   ssid = data['ssid']
   password = data['password']
@@ -40,4 +40,5 @@ hp_cleaner = Pin(13, Pin.OUT)
 lp_santizer = Pin(14, Pin.OUT)
 hp_santizer = Pin(15, Pin.OUT)
 
-
+profile_file = open('profile.json', 'r')
+profile = json.load(profile_file)
