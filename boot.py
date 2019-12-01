@@ -32,7 +32,7 @@ print(station.ifconfig())
 relay = Pin(16, Pin.OUT)
 relay.off()
 
-drain = Pin(2, Pin.OUT)
+co2 = Pin(2, Pin.OUT)
 lp_water = Pin(4, Pin.OUT)
 hp_water = Pin(5, Pin.OUT)
 lp_cleaner = Pin(12, Pin.OUT)
@@ -41,7 +41,7 @@ lp_santizer = Pin(14, Pin.OUT)
 hp_santizer = Pin(15, Pin.OUT)
 
 def all_off():
-    drain.off()
+    co2.off()
     lp_water.off()
     hp_water.off()
     lp_cleaner.off()

@@ -3,26 +3,17 @@ import utime
 
 clean_state = False
 
-async def counter():
-    count = 0
-    while True:
-        count += 1
-        print("--", str(count))
-        await asyncio.sleep(1)  # Pause 1s
-
-
 async def sleep(seconds):
-    for i in range(seconds):
+    for i in range(seconds * 10):
         if (clean_state):
-            await asyncio.sleep(1)
+            await asyncio.sleep(.1)
         else:
             return False
     return True
 
-
 def interface(step):
-    if step == "drain":
-        return drain
+    if step == "co2":
+        return co2
     if step == "fill low pressure water":
         return lp_water
     if step == "fill high pressure water":
@@ -39,28 +30,31 @@ def interface(step):
 
 
 async def clean_process():
-    for item in profile:
+    for step_set in profile:
         all_off()
-        print(item["step"])
-        interface(item["step"]).on()
-        await sleep(item["duration"])
+        for step in step_set["steps"]:
+            print(step)
+            interface(step).on()
+        await sleep(step_set["duration"])
 
 
 async def clean():
     global clean_state
     while True:
-        # print("Test state", str(clean_state))
         if clean_state:
             await clean_process()
+            all_off()
+            print("CLEANER DONE")
             clean_state = False
         else:
+            all_off()
             await asyncio.sleep(.2)
 
 def web_page():
-    if drain.value() == 1:
-      gpio_state="ON"
+    if clean_state == True:
+      cleaner_state="ON"
     else:
-      gpio_state="OFF"
+      cleaner_state="OFF"
     
     html = """<html>
     <head>
@@ -76,8 +70,8 @@ def web_page():
     </style>
     </head>
     <body> 
-    <h1>Keg Cleaner Web Server</h1> 
-    <p>Cleaner state: <strong>""" + gpio_state + """</strong></p>
+    <h1>Keg Cleaner</h1> 
+    <p>Cleaner state: <strong>""" + cleaner_state + """</strong></p>
     <p>
     <a href="/?start=on">
     <button class="button">START</button>
@@ -107,10 +101,10 @@ async def web_server():
             start_on = request.find('/?start=on')
             start_off = request.find('/?start=off')
             if start_on == 6:
-                print('START ON')
+                print('START CLEANER')
                 clean_state = True
             if start_off == 6:
-                print('START OFF')
+                print('STOP CLEANER')
                 clean_state = False
             response = web_page()
             conn.send('HTTP/1.1 200 OK\n')
@@ -124,7 +118,6 @@ async def web_server():
 
 
 loop = asyncio.get_event_loop()
-# loop.create_task(counter())
 loop.create_task(clean())
 loop.create_task(web_server())
 loop.run_forever()
