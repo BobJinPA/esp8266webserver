@@ -1,9 +1,29 @@
-# import web
+import uasyncio as asyncio
+import utime
 
-# Complete project details at https://RandomNerdTutorials.com
-import time
+async def bar():
+    count = 0
+    while True:
+        count += 1
+        print(count)
+        await asyncio.sleep(1)  # Pause 1s
+
+async def foo():
+
+    print("DRAIN")    
+    await asyncio.sleep(2)
+    print("FILL WATER")
+    await asyncio.sleep(2)
+    print("FILL CLEANER")
+    await asyncio.sleep(2)
+    print("DRAIN")
+    await asyncio.sleep(2)
+    while True:
+        print("Bob")
+        await asyncio.sleep(2.6)
 
 def web_page():
+  print("starting web_page()")
   if drain.value() == 1:
     gpio_state="ON"
   else:
@@ -35,86 +55,51 @@ def web_page():
   </p>
   </body>
   </html>"""
-  return html
+  return html        
 
+print("starting web_server")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('', 80))
 s.listen(5)
+s.setblocking(1)
+s.settimeout(.1)
 
+async def web_server():
+    print("STARTING web server")
+    while True:
+        print(utime.time())
+        # await asyncio.sleep(6)
+        try:
+            conn, addr = s.accept()
+            print("past accept")
+            print('Got a connection from %s' % str(addr))
+            request = conn.recv(1024)
+            print("After .recv")
+            print(str(request))
+            request = str(request)
+            print("A")
+            start_on = request.find('/?start=on')
+            start_off = request.find('/?start=off')
+            if start_on == 6:
+                print('START ON')
+            if start_off == 6:
+                print('START OFF')
+            print("C")
+            response = web_page()
+            conn.send('HTTP/1.1 200 OK\n')
+            conn.send('Content-Type: text/html\n')
+            conn.send('Connection: close\n\n')
+            conn.sendall(response)
+            conn.close()      
 
-def all_off():
-  drain.off()
-  lp_water.off()
-  hp_water.off()
-  lp_cleaner.off()
-  hp_cleaner.off()
-  lp_santizer.off()
-  hp_santizer.off()
+        except:
+            print("FALSE")
+            await asyncio.sleep(1)
 
-while True:
-  conn, addr = s.accept()
-  print('Got a connection from %s' % str(addr))
-  request = conn.recv(1024)
-  request = str(request)
-  print('Content = %s' % request)
-  start_on = request.find('/?start=on')
-  start_off = request.find('/?start=off')
-  if start_on == 6:
-    print('START ON')
-    all_off()
-    drain.on()
-    time.sleep(1)
-    all_off()
-    lp_water.on()
-    time.sleep(1)
-    all_off()
-    hp_water.on()
-    time.sleep(1)
-    all_off()
-    drain.on()
-    time.sleep(1)
-    all_off()
-    hp_water.on()
-    time.sleep(1)
-    all_off()
-    lp_cleaner.on()
-    time.sleep(1)
-    all_off()
-    hp_cleaner.on()
-    time.sleep(1)
-    all_off()
-    drain.on()
-    lp_water.on()
-    time.sleep(1)
-    all_off()
-    hp_water.on()
-    time.sleep(1)
-    all_off()
-    drain.on()
-    time.sleep(1)
-    lp_santizer.on()
-    time.sleep(1)
-    all_off()
-    hp_santizer.on()
-    time.sleep(1)
-    all_off()
-    drain.on()
-    time.sleep(1)
-    all_off()
-    lp_water.on()
-    time.sleep(1)
-    all_off()
-    hp_water.on()
-    time.sleep(1)
-    all_off()
-    drain.on()
+        print(utime.time()) 
 
-  if start_off == 6:
-    print('START OFF')
-    all_off()
-  response = web_page()
-  conn.send('HTTP/1.1 200 OK\n')
-  conn.send('Content-Type: text/html\n')
-  conn.send('Connection: close\n\n')
-  conn.sendall(response)
-  conn.close()
+loop = asyncio.get_event_loop()
+loop.create_task(bar()) # Schedule ASAP
+loop.create_task(foo())
+loop.create_task(web_server())
+loop.run_forever()
