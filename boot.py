@@ -13,17 +13,25 @@ import gc
 gc.collect()
 
 import json
-with open('credentials.json', 'r') as credentials:
-  data = json.load(credentials)
-  ssid = data['ssid']
-  password = data['password']
 
-station = network.WLAN(network.STA_IF)
+# for connecting to local wifi network
+# with open('credentials.json', 'r') as credentials:
+#   data = json.load(credentials)
+#   ssid = data['ssid']
+#   password = data['password']
+# station = network.WLAN(network.STA_IF)
+# station.active(True)
+# station.connect(ssid, password)
+# while station.isconnected() == False:
+#   pass
 
+# for using as access point
+ssid = 'keg-washer'
+password = 'keg-washer'
+station = network.WLAN(network.AP_IF)
 station.active(True)
-station.connect(ssid, password)
-
-while station.isconnected() == False:
+station.config(essid=ssid, password=password)
+while station.active() == False:
   pass
 
 print('Connection successful')

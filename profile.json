@@ -1,52 +1,52 @@
 [{
 	"steps": ["co2"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill low pressure water"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill high pressure water", "fill low pressure water"],
-	"duration": 4
+	"duration": 2
 },
 {
 	"steps": ["fill low pressure cleaner"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill high pressure cleaner"],
-	"duration": 4
+	"duration": 2
 },
 {
 	"steps": ["co2"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill low pressure water"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["co2"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill low pressure sanitizer"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill high pressure sanitizer"],
-	"duration": 4
+	"duration": 2
 },
 {
 	"steps": ["co2"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["fill low pressure water"],
-	"duration": 2
+	"duration": 1
 },
 {
 	"steps": ["co2"],
-	"duration": 2
+	"duration": 1
 }]
